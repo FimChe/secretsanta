@@ -15,13 +15,8 @@ public class TeamsterBuilder {
 		return this;
 	}
 
-	public TeamsterBuilder firstName(String firstName) {
-		teamster.setFirstName(firstName);
-		return this;
-	}
-
-	public TeamsterBuilder lastName(String lastName) {
-		teamster.setLastName(lastName);
+	public TeamsterBuilder name(String name) {
+		teamster.setName(name);
 		return this;
 	}
 
