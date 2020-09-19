@@ -1,7 +1,6 @@
 package com.project42.secretsanta.business;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.BDDAssertions.then;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +25,8 @@ public class MatchMakerTest {
 		// When
 		Set<Pair> matches = sut.match(teamsters);
 		// Then
-		assertEquals(matches.size(), 3);
-		assertTrue(matches.stream().noneMatch(pair -> pair.getFrom().getId().equals(pair.getTo().getId())));
+		then(matches)//
+				.hasSize(3)//
+				.noneMatch(match -> match.getFrom().getId().equals(match.getTo().getId()));
 	}
 }

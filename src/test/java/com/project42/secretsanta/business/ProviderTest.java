@@ -1,6 +1,6 @@
 package com.project42.secretsanta.business;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.assertj.core.api.BDDAssertions.then;
 
 import java.util.List;
 
@@ -19,6 +19,6 @@ public class ProviderTest {
 		// When
 		List<Teamster> teamsters = sut.provide();
 		// Then
-		assertFalse(teamsters.isEmpty());
+		then(teamsters).isNotEmpty();
 	}
 }

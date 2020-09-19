@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.project42</groupId>
 	<artifactId>secretsanta</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>2.0.0-SNAPSHOT</version>
 	<name>secretsanta</name>
 	<description>Secret Santa pairing application</description>
 
