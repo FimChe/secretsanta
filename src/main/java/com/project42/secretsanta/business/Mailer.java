@@ -24,11 +24,10 @@ import com.project42.secretsanta.model.Pair;
 @Component
 public class Mailer {
 
-	private static final String SMTP_AUTH = "mail.smtp.auth";
-	private static final String SMTP_TLS_ENABLE = "mail.smtp.starttls.enable";
 	private static final String SMTP_HOST = "mail.smtp.host";
 	private static final String SMTP_PORT = "mail.smtp.port";
-	private static final String SMTP_SSL_TRUST = "mail.smtp.ssl.trust";
+	private static final String SMTP_AUTH = "mail.smtp.auth";
+	private static final String SMTP_SSL_ENABLE = "mail.smtp.ssl.enable";
 	private static final String USERNAME = "mail.username";
 	private static final String PASSWORD = "mail.password";
 
@@ -50,34 +49,36 @@ public class Mailer {
 		this.password = password;
 	}
 
-	public void email(Set<Pair> matches) {
+	public void email(Set<Pair> matches) throws Exception {
 		Session session = createSession();
-		matches.forEach(match -> sendMessage(match, session));
+		for (Pair match : matches) {
+			sendMessage(match, session);
+		}
 	}
 
 	private Session createSession() {
 		Properties prop = new Properties();
-		prop.put(SMTP_AUTH, true);
-		prop.put(SMTP_TLS_ENABLE, "true");
 		prop.put(SMTP_HOST, host);
 		prop.put(SMTP_PORT, port);
-		prop.put(SMTP_SSL_TRUST, host);
+		prop.put(SMTP_AUTH, "true");
+		prop.put(SMTP_SSL_ENABLE, "true");
 
-		return Session.getInstance(prop, new Authenticator() {
+		Session session = Session.getInstance(prop, new Authenticator() {
 
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(username, password);
 			}
 		});
+//		session.setDebug(true);
+
+		return session;
 	}
 
-	private void sendMessage(Pair match, Session session) {
+	private void sendMessage(Pair match, Session session) throws Exception {
 		try {
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("secretsanta@fisglobal.com"));
-			message.setRecipients(Message.RecipientType.TO,
-					InternetAddress.parse("aleksandar-sasa.serafimovski@fisglobal.com"));
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(match.getFrom().getEmail()));
 			message.setSubject("Secret Santa");
 
 			String msg = "Tvoj par je: " + match.getTo().getName();
@@ -97,7 +98,7 @@ public class Mailer {
 					match.getTo().getName());
 		} catch (Exception e) {
 			LOGGER.error("Oh, snap! Email failed:\n\n{}", e.getMessage());
-			e.printStackTrace();
+			throw e;
 		}
 	}
 }

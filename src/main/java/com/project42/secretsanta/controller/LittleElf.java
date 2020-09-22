@@ -45,7 +45,7 @@ public class LittleElf {
 
 			return "Done! :)";
 		} catch (Exception e) {
-			LOGGER.error("Oh, snap!\n\n{}" + e.getMessage());
+			LOGGER.error("Oh, snap!\n\n{}", e.getMessage());
 			e.printStackTrace();
 
 			return "Failed :(";
