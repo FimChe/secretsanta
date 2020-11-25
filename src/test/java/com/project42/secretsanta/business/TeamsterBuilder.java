@@ -25,6 +25,16 @@ public class TeamsterBuilder {
 		return this;
 	}
 
+	public TeamsterBuilder address(String address) {
+		teamster.setAddress(address);
+		return this;
+	}
+
+	public TeamsterBuilder phone(String phone) {
+		teamster.setPhone(phone);
+		return this;
+	}
+
 	public Teamster build() {
 		return teamster;
 	}

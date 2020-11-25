@@ -1,11 +1,11 @@
 package com.project42.secretsanta.model;
 
-public class Pair {
+public class Match {
 
 	private final Teamster from;
 	private final Teamster to;
 
-	public Pair(Teamster from, Teamster to) {
+	public Match(Teamster from, Teamster to) {
 		this.from = from;
 		this.to = to;
 	}

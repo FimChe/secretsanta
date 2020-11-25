@@ -19,7 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.project42.secretsanta.model.Pair;
+import com.project42.secretsanta.model.Match;
+import com.project42.secretsanta.model.Teamster;
 
 @Component
 public class Mailer {
@@ -49,9 +50,9 @@ public class Mailer {
 		this.password = password;
 	}
 
-	public void email(Set<Pair> matches) throws Exception {
+	public void email(Set<Match> matches) throws Exception {
 		Session session = createSession();
-		for (Pair match : matches) {
+		for (Match match : matches) {
 			sendMessage(match, session);
 		}
 	}
@@ -75,16 +76,14 @@ public class Mailer {
 		return session;
 	}
 
-	private void sendMessage(Pair match, Session session) throws Exception {
+	private void sendMessage(Match match, Session session) throws Exception {
 		try {
 			Message message = new MimeMessage(session);
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(match.getFrom().getEmail()));
 			message.setSubject("Secret Santa");
 
-			String msg = "Tvoj par je: " + match.getTo().getName();
-
 			MimeBodyPart mimeBodyPart = new MimeBodyPart();
-			mimeBodyPart.setContent(msg, "text/html; charset=utf-8");
+			mimeBodyPart.setContent(generateContent(match.getTo()), "text/html; charset=utf-8");
 
 			Multipart multipart = new MimeMultipart();
 			multipart.addBodyPart(mimeBodyPart);
@@ -100,5 +99,33 @@ public class Mailer {
 			LOGGER.error("Oh, snap! Email failed:\n\n{}", e.getMessage());
 			throw e;
 		}
+	}
+
+	String generateContent(Teamster receiver) {
+		StringBuilder content = new StringBuilder("Tvoj par je: ")//
+				.append(receiver.getName());
+
+		if (receiver.getAddress() != null) {
+			content.append("\n\n")//
+					.append("Adresa za isporuku: ")//
+					.append(receiver.getAddress())//
+					.append("\n")//
+					.append("Broj telefona (za PostExpress): ")//
+					.append(receiver.getPhone())//
+					.append("\n\n")
+					.append("Poklone se otvaraju na Teams pozivu 25.12. u 12:30h (stići će link posebno).");
+		} else {
+			content.append("\n\n")//
+					.append("Pokloni se razmenjuju 25.12. u 12:30h u parkiću iza FIS zgrade.")//
+					.append("\n")//
+					.append("Ponesi masku, da te Ika ne sanja..");
+		}
+
+		content.append("\n\n")//
+				.append("XOXO,")//
+				.append("\n")//
+				.append("- Santa");
+
+		return content.toString();
 	}
 }
