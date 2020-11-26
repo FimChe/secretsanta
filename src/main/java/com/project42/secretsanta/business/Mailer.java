@@ -106,24 +106,24 @@ public class Mailer {
 				.append(receiver.getName());
 
 		if (receiver.getAddress() != null) {
-			content.append("\n\n")//
+			content.append("<br><br>")//
 					.append("Adresa za isporuku: ")//
 					.append(receiver.getAddress())//
-					.append("\n")//
+					.append("<br>")//
 					.append("Broj telefona (za PostExpress): ")//
 					.append(receiver.getPhone())//
-					.append("\n\n")
-					.append("Poklone se otvaraju na Teams pozivu 25.12. u 12:30h (stići će link posebno).");
+					.append("<br><br>")
+					.append("Pokloni se otvaraju na Teams pozivu 25.12. u 12:30h (stići će link posebno).");
 		} else {
-			content.append("\n\n")//
+			content.append("<br><br>")//
 					.append("Pokloni se razmenjuju 25.12. u 12:30h u parkiću iza FIS zgrade.")//
-					.append("\n")//
+					.append("<br>")//
 					.append("Ponesi masku, da te Ika ne sanja..");
 		}
 
-		content.append("\n\n")//
+		content.append("<br><br>")//
 				.append("XOXO,")//
-				.append("\n")//
+				.append("<br>")//
 				.append("- Santa");
 
 		return content.toString();

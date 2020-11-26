@@ -1,12 +1,12 @@
 package com.project42.secretsanta.business;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Component;
@@ -28,20 +28,16 @@ public class MatchMaker {
 	}
 
 	private Set<Match> doMatch(List<Teamster> teamsters) {
-		List<Teamster> inbound = new ArrayList<>(teamsters);
-		List<Teamster> outbound = new ArrayList<>(teamsters);
+		if (teamsters.isEmpty()) {
+			return Collections.emptySet();
+		}
+
+		Collections.shuffle(teamsters);
 
 		Set<Match> matches = new HashSet<>();
-		Random generator = new Random();
-
-		while (!inbound.isEmpty() && !outbound.isEmpty()) {
-			int inboundIndex = generator.nextInt(inbound.size());
-			int outboundIndex = generator.nextInt(outbound.size());
-
-			if (!inbound.get(inboundIndex).getId().equals(outbound.get(outboundIndex).getId())) {
-				matches.add(new Match(inbound.remove(inboundIndex), outbound.remove(outboundIndex)));
-			}
-		}
+		IntStream.range(0, teamsters.size() - 1)//
+				.forEach(i -> matches.add(new Match(teamsters.get(i), teamsters.get(i + 1))));
+		matches.add(new Match(teamsters.get(teamsters.size() - 1), teamsters.get(0)));
 
 		return matches;
 	}
